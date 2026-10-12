@@ -22,3 +22,11 @@ dune exec -- assoc -seed 48596 -type a -nb 100000000 > answer_associativity.txt
 Pour banquier naif, print vers un fichier :
 
 dune exec -- assoc -type bn > answer_banking.txt
+
+
+
+docker :
+
+
+docker build -t rep-lab2 .
+docker run --rm --user "$(id -u):$(id -g)"  -v "$(pwd)":/out rep-la

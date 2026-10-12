@@ -1,4 +1,4 @@
 (executable
  (public_name assoc)
  (name main)
- (libraries assoc decimal))
+ (libraries assoc))

@@ -1,9 +1,9 @@
 
-
-type exo = Associativite | Bank
+type exo = Associativite | BankNaive | BankOptimized
 
 let generate () = 
   (Random.float 1.0, Random.float 1.0, Random.float 1.0)
+
 
 
 let compare_sum (x,y,z) =
@@ -23,13 +23,23 @@ let run_nb nb =
   float_of_int(a) /. (float_of_int a +. float_of_int b)
 
 
-  let banking money year = 
-let rec banking money year totaly =
+let banking money year = 
+  let rec banking money year totaly = 
   match year with
   | 1 -> money-.1.
   | _ ->  banking ((money -. 1. ) *. (Int.to_float ((totaly +1)-year))) (year-1) totaly
 in banking money year year
-  (* seed 48596  82.7762, 100000000 it*)
+
+(* Pas fonctionnel encore
+let banking_op (money) year =
+    let rec banking_op money year totaly =
+  match year with
+  | 1 ->  Decimal.(-) (money) (Decimal.one)
+  | _ ->  banking_op (Decimal.( * ) (Decimal.(-) (money) (Decimal.one))   (Decimal.of_int(((totaly +1)-year))))   (year-1) totaly
+in banking_op money year year
+*)
+
+(* seed 48596  82.7762, 100000000 it*)
 let () = 
 let seed = ref None in
 let nb = ref 500000 in
@@ -40,10 +50,10 @@ let () = Arg.parse
  ("-nb", Arg.Int (fun x -> nb := x), "Le nombre d'itération");
  ("-type",  Arg.String (fun x -> exo := match x with 
  | "a" -> Associativite
- | "b" -> Bank
+ | "bn" -> BankNaive
+ | "bo" -> BankOptimized
  | _ -> failwith "Erreur arg, ni a ni b"
- ), "L'exo à run : associativite (a) ou banque (b)");
- ("-f", Arg.Set to_file, "Vers le fichier au lieu de print, cf tp2")
+ ), "L'exo à run : associativite (a) ou banque (b)")
 ]
 (fun _ -> ())
 "Running seed"
@@ -54,9 +64,10 @@ let () = match !seed with
 in
  let value = match !exo with
  | Associativite -> 
- 100. *. run_nb !nb
- | Bank -> banking (Float.exp 1.0) 50 
+ 100. *. run_nb !nb |> Float.to_string
+ | BankNaive -> banking (Float.exp 1.0) 50 |> Float.to_string
+ | BankOptimized -> failwith "NIY" (*banking_op (Decimal.of_string Decimal.Context. "2.718281828459") 50 |> Decimal.to_string *)
  in 
  match !to_file with
- | false -> value |> Float.to_string |> print_endline
+ | false -> value |> print_endline
  | true -> failwith "NIY"

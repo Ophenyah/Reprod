@@ -5,3 +5,20 @@ Nombre d'itération : 100000000
 Random.init Seed
 
 Range des nombres : Random.float 1.0
+
+Commandes : 
+
+pour tout executer + fichier, ./run.sh
+Resultat attendu :
+82.812702
+-8.79360786036e+46
+
+
+pour Assoc, print vers un fichier :
+
+dune exec -- assoc -seed 48596 -type a -nb 100000000 > answer_associativity.txt
+
+
+Pour banquier naif, print vers un fichier :
+
+dune exec -- assoc -type bn > answer_banking.txt

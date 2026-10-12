@@ -5,4 +5,4 @@ COPY --chown=opam:opam . .
 
 RUN opam install . --deps-only  -y
 RUN opam exec -- dune build
-ENTRYPOINT ["./run.sh"]
+CMD ["./run.sh"]

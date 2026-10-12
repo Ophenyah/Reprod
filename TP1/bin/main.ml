@@ -1,5 +1,7 @@
 
 
+type exo = Associativite | Bank
+
 let generate () = 
   (Random.float 1.0, Random.float 1.0, Random.float 1.0)
 
@@ -21,13 +23,27 @@ let run_nb nb =
   float_of_int(a) /. (float_of_int a +. float_of_int b)
 
 
-  (* seed 48596  82.7762, 10M it*)
+  let banking money year = 
+let rec banking money year totaly =
+  match year with
+  | 1 -> money-.1.
+  | _ ->  banking ((money -. 1. ) *. (Int.to_float ((totaly +1)-year))) (year-1) totaly
+in banking money year year
+  (* seed 48596  82.7762, 100000000 it*)
 let () = 
 let seed = ref None in
 let nb = ref 500000 in
+let to_file = ref false in
+let exo = ref Associativite in
 let () = Arg.parse
 [("-seed", Arg.Int (fun x -> seed := Some x), "La seed du random");
- ("-nb", Arg.Int (fun x -> nb := x), "Le nombre d'itération")
+ ("-nb", Arg.Int (fun x -> nb := x), "Le nombre d'itération");
+ ("-type",  Arg.String (fun x -> exo := match x with 
+ | "a" -> Associativite
+ | "b" -> Bank
+ | _ -> failwith "Erreur arg, ni a ni b"
+ ), "L'exo à run : associativite (a) ou banque (b)");
+ ("-f", Arg.Set to_file, "Vers le fichier au lieu de print, cf tp2")
 ]
 (fun _ -> ())
 "Running seed"
@@ -36,4 +52,11 @@ let () = match !seed with
 | None -> Random.self_init ()
 | Some a -> Random.init a
 in
- 100. *. run_nb !nb |> Float.to_string |> print_endline
+ let value = match !exo with
+ | Associativite -> 
+ 100. *. run_nb !nb
+ | Bank -> banking (Float.exp 1.0) 50 
+ in 
+ match !to_file with
+ | false -> value |> Float.to_string |> print_endline
+ | true -> failwith "NIY"

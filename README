@@ -1,0 +1,7 @@
+Associativité :
+
+Seed pour les résultats : 48596
+Nombre d'itération : 100000000
+Random.init Seed
+
+Range des nombres : Random.float 1.0

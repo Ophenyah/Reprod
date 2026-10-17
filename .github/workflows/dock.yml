@@ -10,7 +10,7 @@ jobs:
       run:
         working-directory: ./TP1
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout
       - run: docker build -t rep-lab2 .
       - run: docker run --rm --user "$(id -u):$(id -g)"  -v "$(pwd)":/out rep-lab2 
       - name: Commit generated files

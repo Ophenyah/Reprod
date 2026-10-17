@@ -1,6 +1,8 @@
 name: GitHub Actions Repro
 run-name: Ca dockerise un max 🦈
 on: [push]
+permissions:
+  contents: write
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest

@@ -1,4 +1,4 @@
-name: GitHub Actions Repro LLM
+name: Repro Docker LLM
 run-name: Ca LLMise un max 🦈
 on: [push]
 permissions:
@@ -21,6 +21,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update generated results"
+            git commit -m "Update generated results LLM"
             git push
           fi

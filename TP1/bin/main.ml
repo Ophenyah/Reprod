@@ -1,5 +1,5 @@
-
-type exo = Associativite | BankNaive | BankOptimized
+type property = Assoc | Distrib
+type exo = Math of property | BankNaive | BankOptimized 
 
 let generate () = 
   (Random.float 1.0, Random.float 1.0, Random.float 1.0)
@@ -10,16 +10,24 @@ let compare_sum (x,y,z) =
   Float.equal ((x +. y) +. z) (x +. (y +. z)) 
 
 
-let rec run_nb_stats (nb, y, n) = 
+  let compare_distrib (x,y,z) =
+  Float.equal (x *. (y +. z)) (x *.y +. x *. z) 
+
+
+
+let rec run_nb_stats (nb, y, n) f = 
   match nb with
   | 0 -> (y,n)
-  | _ -> match compare_sum (generate ()) with 
-      | true -> run_nb_stats (nb-1, y+1, n)
-      | false -> run_nb_stats (nb-1, y, n+1)
+  | _ -> match f (generate ()) with 
+      | true -> run_nb_stats (nb-1, y+1, n) f
+      | false -> run_nb_stats (nb-1, y, n+1) f
 
 
-let run_nb nb =
-  let (a,b) = run_nb_stats (nb, 0, 0) in
+let run_nb nb p=
+ let f = match p with 
+ | Assoc -> compare_sum
+ | Distrib -> compare_distrib in 
+  let (a,b) = run_nb_stats (nb, 0, 0) f in
   float_of_int(a) /. (float_of_int a +. float_of_int b)
 
 
@@ -44,12 +52,13 @@ let () =
 let seed = ref None in
 let nb = ref 500000 in
 let to_file = ref false in
-let exo = ref Associativite in
+let exo = ref BankNaive in
 let () = Arg.parse
 [("-seed", Arg.Int (fun x -> seed := Some x), "La seed du random");
  ("-nb", Arg.Int (fun x -> nb := x), "Le nombre d'itération");
  ("-type",  Arg.String (fun x -> exo := match x with 
- | "a" -> Associativite
+ | "a" -> Math(Assoc)
+ | "d" -> Math(Distrib)
  | "bn" -> BankNaive
  | "bo" -> BankOptimized
  | _ -> failwith "Erreur arg, ni a ni b"
@@ -63,11 +72,13 @@ let () = match !seed with
 | Some a -> Random.init a
 in
  let value = match !exo with
- | Associativite -> 
- 100. *. run_nb !nb |> Float.to_string
+ | Math(a) -> 
+ 100. *. (run_nb !nb a)|> Float.to_string
  | BankNaive -> banking (Float.exp 1.0) 50 |> Float.to_string
  | BankOptimized -> failwith "NIY" (*banking_op (Decimal.of_string Decimal.Context. "2.718281828459") 50 |> Decimal.to_string *)
  in 
  match !to_file with
  | false -> value |> print_endline
  | true -> failwith "NIY"
+
+ (*TODO TP3 checkdiff*)

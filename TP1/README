@@ -1,3 +1,5 @@
+# TP1-2
+
 Associativité :
 
 Seed pour les résultats : 48596
@@ -23,10 +25,191 @@ Pour banquier naif, print vers un fichier :
 
 dune exec -- assoc -type bn > answer_banking.txt
 
-
+# TP2
 
 docker :
 
-
 docker build -t rep-lab2 .
 docker run --rm --user "$(id -u):$(id -g)"  -v "$(pwd)":/out rep-la
+
+## Using chatgpt
+
+
+### Prompt : 
+
+
+```Is (x+y)+z == x+(y+z)? Choose any language, compiler/interpreter, library, computing environment or machine (Java, Rust, Scratch, SageMath, a spreadsheet…). Is it true? Always?
+
+How often (x+y)+z == x+(y+z)? Write a program that prints a percentage. The question is deliberately under-specified ("x, y, z: number"), so you will have to make choices. Make them, and write each one down: they are part of your result.
+
+Is your result reproducible? Run your program again, on another machine if you can. Do you get the same result?
+
+The banking problem: do the same. "My banker proposed this investment to me: you give me e ≈ 2.71828… The following year, I take 1 euro as a fee and multiply by 1. The next year, I take 1 euro as a fee and multiply by 2. The next year, I take 1 euro as a fee and multiply by 3. […] After n years, I take 1 euro as a fee and multiply by n. To retrieve my money, there is a 1 euro fee. In 50 years, for my retirement, how much money will I have?" Write a program that answers this question, write down your choices, and check whether your result is reproducible.
+```
+
+
+Answer : 
+
+```
+The key point is that floating-point arithmetic is not real-number arithmetic. In general,
+
+$$
+(x+y)+z \ne x+(y+z)
+$$
+
+because computers round intermediate results. The result also depends on the number representation, the programming language, compiler optimizations, and the choices made when generating $x,y,z$.
+
+For the banking problem, the order of operations and the rounding behavior matter too. We need to define the investment recurrence precisely before calculating the final amount.
+
+I'll use Python 3, IEEE 754 double-precision floating-point numbers (`float`), and a single program with two command-line modes.
+
+## 1. Program and choices
+
+I'll define two modes:
+
+- `associativity`: generate one million triples of random floating-point numbers and count how often the two expressions compare equal.
+- `bank`: simulate the investment for 50 years, using the specified fee and multiplication order.
+
+For the associativity experiment, I'll use values uniformly sampled from $[-10^{16},10^{16}]$, a fixed random seed, and exact equality (`==`) rather than a tolerance. This makes the experiment repeatable under the same Python implementation and random-number generator.
+
+For the banking experiment, I'll start with Python's `math.e`, subtract one euro before each year's multiplication, multiply by the year number, and subtract one euro at the end. I'll use ordinary Python `float` arithmetic throughout.
+
+## 2. Complete Python program
+
+Save this as `main.py`.
+
+python
+```
+
+import math
+import random
+import sys
+
+TRIALS = 1_000_000
+SEED = 20261019
+
+def associativity():
+    rng = random.Random(SEED)
+    equal = 0
+
+    for _ in range(TRIALS):
+        x = rng.uniform(-1e16, 1e16)
+        y = rng.uniform(-1e16, 1e16)
+        z = rng.uniform(-1e16, 1e16)
+
+        if (x + y) + z == x + (y + z):
+            equal += 1
+
+    percentage = 100.0 * equal / TRIALS
+    print(f"{percentage:.6f}%")
+
+def bank():
+    balance = math.e
+
+    for year in range(1, 51):
+        balance = (balance - 1.0) * year
+
+    balance -= 1.0
+    print(balance)
+
+def main():
+    if len(sys.argv) != 2:
+        print(
+            "Usage: python main.py "
+            "{associativity|bank}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    mode = sys.argv[1]
+
+    if mode == "associativity":
+        associativity()
+    elif mode == "bank":
+        bank()
+    else:
+        print("Unknown mode", file=sys.stderr)
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+```
+
+## 3. How to run it
+
+From a terminal with Python 3 installed:
+
+bash
+```
+python main.py associativity
+```
+
+This prints a single percentage, for example `99.123400%` (illustrative only; the actual result is determined by the program).
+
+To run the banking simulation:
+
+bash
+```
+python main.py bank
+```
+
+With ordinary IEEE 754 double-precision arithmetic, the banking calculation is expected to print approximately:
+
+text
+```
+-4.3968039301820685e+48
+```
+
+This is an enormous negative number, not a plausible retirement balance. It is a consequence of floating-point rounding errors being magnified by the repeated multiplications. The program's arithmetic result is not the same as the mathematically exact result.
+
+## 4. Is addition associative?
+
+No, not always for floating-point numbers.
+
+For example, in Python:
+
+python
+```
+x = 1e16
+y = -1e16
+z = 1.0
+
+print((x + y) + z)
+print(x + (y + z))
+```
+
+The output is:
+
+text
+```
+1.0
+0.0
+```
+
+In the first expression, `x + y` is exactly zero, so adding `z` produces `1.0`.
+
+In the second expression, `y + z` rounds to `-1e16` because the value `1.0` is too small to affect that floating-point number. The final sum is zero.
+
+Therefore, the two expressions are not always equal.
+
+## 5. Is the result reproducible?
+
+There are two different questions here.
+
+- Associativity experiment: The fixed seed makes the sequence of generated values reproducible under the same Python random-number generator. The percentage should therefore be repeatable on the same implementation. Different languages, random-number generators, or floating-point implementations may produce different results.
+- Banking experiment: With the same sequence of IEEE 754 double-precision operations, the result should be reproducible. Different compilers, hardware, precision settings, or optimization choices may change the result.
+
+For a mathematically exact calculation of the banking problem, the final balance would be
+
+$$
+50!\left(e-\sum_{k=0}^{49}\frac{1}{k!}\right)-1,
+$$
+
+which is approximately €0.0196. This differs drastically from the ordinary floating-point simulation because rounding errors introduced early in the calculation are magnified by subsequent multiplications.
+
+I have not run the Python program on a second machine, so cross-machine reproducibility remains something to test rather than a verified observation.
+
+Conclusion: The percentage is meaningful only after the input distribution, numeric type, equality test, and random seed have been specified. The banking example demonstrates why numerical algorithms must account for rounding error, especially when repeated operations amplify it.
+```
+
+# TP3

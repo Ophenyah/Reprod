@@ -10,6 +10,9 @@ jobs:
       run:
         working-directory: ./TP2LLM
     steps:
+      - name: Cleanup
+      - run:  rm -f answer_associativity_llm.txt
+      - run:  rm -f answer_banking_llm.txt
       - uses: actions/checkout@v4
       - run: docker build -t rep-lab2-llm .
       - run: docker run --rm --user "$(id -u):$(id -g)"  -v "$(pwd)":/out rep-lab2-llm

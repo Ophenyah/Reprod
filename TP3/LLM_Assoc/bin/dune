@@ -1,0 +1,4 @@
+(executable
+ (public_name LLM_Assoc)
+ (name main)
+ (libraries LLM_Assoc))

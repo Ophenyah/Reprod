@@ -1,0 +1,4 @@
+program,repetitions,language,version,value range,seed,distribution,number format,machine,result
+me,100000000,Ocaml, 5.4.0, [0.0.1.0],48596 ,Random.float, Float, mine, 82.812702
+ChatGPT TP2 llm.py,1000000,Python,3.14, [-1e16. 1e16], 20261019,rng.uniform, Float, mine, 92.394000
+ChatGPT TP3 LLM_Assoc, 1000000, Ocaml, 5.4.0, [-1e10.1e10] , Random , min_value +. Random.float (max_value -. min_value), Float, mine, 92.2358   

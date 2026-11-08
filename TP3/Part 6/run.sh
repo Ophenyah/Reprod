@@ -71,7 +71,8 @@ do
             fi
 
             if [ "$env" = "ocamlopt" ]; then
-             res=$(run (ocamlfind ocamlopt -package zarith -linkpkg ./ocaml/bin/main.ml -o $field1 && ./$field1 -iter $clean_iter -range $clean_interval  $clean_type))
+            ocamlfind ocamlopt -package zarith -linkpkg ./ocaml/bin/main.ml -o $field1
+             res=$(run ./$field1 -iter $clean_iter -range $clean_interval  $clean_type)
             else
              res=$(run dune exec  --no-print-directory --root ./ocaml assoc -- -iter $clean_iter -range $clean_interval  $clean_type)
             fi

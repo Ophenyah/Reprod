@@ -1,0 +1,59 @@
+name: Compare properties
+run-name: Compare ${{ inputs.branch_a }} vs ${{ inputs.branch_b }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_a:
+        description: "First branch (associativity)"
+        default: "main"
+      file_a:
+        description: "Path of the generated file on the first branch"
+        default: "TP1/answer_associativity.txt"
+      branch_b:
+        description: "Second branch (distributivity)"
+        default: "distributivity"
+      file_b:
+        description: "Path of the generated file on the second branch"
+        default: "TP1/result_distributivity.txt"
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compare committed results
+        env:
+          BA: ${{ inputs.branch_a }}
+          FA: ${{ inputs.file_a }}
+          BB: ${{ inputs.branch_b }}
+          FB: ${{ inputs.file_b }}
+        run: |
+          git show "origin/$BA:$FA" > a.txt
+          git show "origin/$BB:$FB" > b.txt
+
+          {
+            echo "### $BA ($FA)"; cat a.txt; echo
+            echo "### $BB ($FB)"; cat b.txt; echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if diff -u a.txt b.txt > diff.txt; then
+            echo "Files are IDENTICAL" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Files are DIFFERENT" | tee -a "$GITHUB_STEP_SUMMARY"
+            { echo '```diff'; cat diff.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results
+          path: |
+            a.txt
+            b.txt
+            diff.txt

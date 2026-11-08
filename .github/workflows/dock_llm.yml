@@ -1,4 +1,4 @@
-name: Repro Docker LLM
+name: Repro Docker  LLM
 run-name: Ca LLMise un max 🦈
 on: [push]
 permissions:

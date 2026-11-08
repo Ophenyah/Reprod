@@ -1,0 +1,68 @@
+name: Replicability and Variability 
+run-name: Sample, serialize, output
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+ 
+    steps:
+      - uses: actions/checkout@v4
+
+      # --- Prepare ---------------------------------------------------------
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install flamapy
+        run: pip install flamapy==2.6.0
+
+      - name: System libraries for zarith
+        run: sudo apt-get update && sudo apt-get install -y pkg-config libgmp-dev
+
+      - uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: "5.4"
+
+      - name: Install zarith
+        run: opam install -y zarith
+
+      # --- Sampling --------------------------------------------------------
+      - name: Sample configurations
+        working-directory: TP3/Part 5
+        run: |
+          python3 sample.py ./fm/experiment.uvl --size 20 --seed 1 
+
+      # --- Docker images ---------------------------------------------------
+      - name: Build Docker images
+        run: |
+          docker build -t python_samp "/TP3/Part 6/python"
+          docker build -t ocaml_samp  "/TP3/Part 6/ocaml"
+
+      # --- Run -------------------------------------------------------------
+      - name: Run experiments
+        working-directory: TP3/Part 6
+        run: bash ./run.sh
+
+      # --- Commit if the output changed -----------------------------------
+      - name: Commit output.csv if new or different
+        run: |
+          f="TP3/Part 6/output.csv"
+          if [ -n "$(git status --porcelain -- "$f")" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -- "$f"
+            git commit -m "Update output.csv"
+            git push
+            echo "output.csv changed: committed" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::notice::output.csv is identical to the committed version, nothing to commit"
+            echo "output.csv unchanged: nothing committed" >> "$GITHUB_STEP_SUMMARY"
+          fi

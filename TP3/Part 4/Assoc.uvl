@@ -1,0 +1,47 @@
+// The classic UVL sandwich — edit me!
+features
+	Assoc
+		mandatory
+			Environment
+				mandatory
+					Language
+						alternative
+							Python
+							Ocaml
+								alternative
+									"Dune project"
+									ocamlopt
+					ENV
+						alternative
+							Docker
+							"on my machine"
+		mandatory
+			Typed
+				alternative
+					Float
+					Z
+					Decimal
+			Numbers
+				mandatory
+					Distribution
+						alternative
+							Random.float
+							random.Random
+					Range
+						alternative
+							"[0,1]"
+							"[-1e16,1e16]"
+							"[-1e10,1e10]"
+					Iterations
+						alternative
+							"100"
+							"1000"
+							"1000000"
+
+
+
+constraints
+	Decimal => Python
+	Z => Ocaml
+	random.Random => Python
+	Random.float => Ocaml

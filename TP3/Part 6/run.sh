@@ -1,12 +1,24 @@
 #!/bin/bash
 
 
+run() {
+  local out
+  if out=$("$@" 2>/tmp/err.txt </dev/null); then
+    echo "$out" | tail -n1
+  else
+    echo "FAILED: $*" >&2
+    cat /tmp/err.txt >&2
+    echo ERROR
+  fi
+}
+
+
 cd "$(dirname "$0")"
 
 
 touch output.csv
 
-echo "config_id,origin_of_config,Language,Ocaml,ENV,Typed,Distribution,Range,Iterations, result" >> output.csv
+echo "config_id,origin_of_config,Language,Ocaml,ENV,Typed,Distribution,Range,Iterations, result" > output.csv
 
 while IFS=, read -r field1 field2 lang env dock type gen range iter
 do
@@ -46,7 +58,7 @@ do
             elif [ "$type" = "Decimal" ]; then
                 clean_type=1
             fi
-             res=$(python3 ./python/assoc.py -iter $clean_iter -range $clean_interval -type $clean_type)
+             res=$(run python3 ./python/assoc.py -iter $clean_iter -range $clean_interval -type $clean_type)
         elif [ $lang = "Ocaml" ]; then
             
             if [ "$type" = "Float" ]; then
@@ -54,7 +66,7 @@ do
             elif [ "$type" = "Z" ]; then
                 clean_type="-Z"
             fi
-             res=$(dune exec  --no-print-directory --root ./ocaml assoc -- -iter $clean_iter -range $clean_interval  $clean_type)
+             res=$(run dune exec  --no-print-directory --root ./ocaml assoc -- -iter $clean_iter -range $clean_interval  $clean_type)
         fi
     else
             if [ $lang  = "Python" ]; then
@@ -66,7 +78,7 @@ do
             elif [ "$type" = "Decimal" ]; then
                 clean_type=1
             fi
-            res=$(docker run --rm python_samp -iter $clean_iter -range $clean_interval -type $clean_type)
+            res=$(run docker run --rm python_samp -iter $clean_iter -range $clean_interval -type $clean_type)
         elif [ $lang = "Ocaml" ]; then
             
             clean_type=""
@@ -75,7 +87,7 @@ do
             elif [ "$type" = "Z" ]; then
                 clean_type="-Z"
             fi
-             res=$(docker run --rm ocaml_samp -- -iter $clean_iter -range $clean_interval  $clean_type)
+             res=$(run docker run --rm ocaml_samp -- -iter $clean_iter -range $clean_interval  $clean_type)
         fi
     fi
 

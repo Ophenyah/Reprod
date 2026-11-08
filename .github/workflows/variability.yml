@@ -49,7 +49,7 @@ jobs:
 
       # --- Run -------------------------------------------------------------
       - name: Build the OCaml program (rows not run in Docker)
-        working-directory: TP3/Part 6/B       # your dune project folder
+        working-directory: TP3/Part 6/ocaml       # your dune project folder
         run: |
           opam install . --deps-only -y
           dune build

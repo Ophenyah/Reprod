@@ -42,9 +42,10 @@ jobs:
 
       # --- Docker images ---------------------------------------------------
       - name: Build Docker images
+          working-directory: TP3/Part 6
         run: |
-          docker build -t python_samp "/TP3/Part 6/python"
-          docker build -t ocaml_samp  "/TP3/Part 6/ocaml"
+          docker build -t python_samp "./python"
+          docker build -t ocaml_samp  "./ocaml"
 
       # --- Run -------------------------------------------------------------
       - name: Run experiments

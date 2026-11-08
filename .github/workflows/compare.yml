@@ -15,7 +15,7 @@ on:
         default: "distributivity"
       file_b:
         description: "Path of the generated file on the second branch"
-        default: "TP1/result_distributivity.txt"
+        default: "TP1/answer_distributivity.txt"
 
 permissions:
   contents: read

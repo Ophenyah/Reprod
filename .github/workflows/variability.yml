@@ -34,6 +34,9 @@ jobs:
       - name: Install zarith
         run: opam install -y zarith
 
+
+      - name: Add the opam switch to PATH
+        run: echo "$(opam var bin)" >> "$GITHUB_PATH"
       # --- Sampling --------------------------------------------------------
       - name: Sample configurations
         working-directory: TP3/Part 5

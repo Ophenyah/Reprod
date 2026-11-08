@@ -45,3 +45,4 @@ constraints
 	Z => Ocaml
 	random.Random => Python
 	Random.float => Ocaml
+	Docker => !ocamlopt

@@ -48,6 +48,11 @@ jobs:
           docker build -t ocaml_samp  "./ocaml"
 
       # --- Run -------------------------------------------------------------
+      - name: Build the OCaml program (rows not run in Docker)
+        working-directory: TP3/Part 6/B       # your dune project folder
+        run: |
+          opam install . --deps-only -y
+          dune build
       - name: Run experiments
         working-directory: TP3/Part 6
         run: bash ./run.sh

@@ -42,6 +42,8 @@ in banking_op money year year
 (* seed 48596  82.7762, 100000000 it*)
 let () = 
 let seed = ref None in
+let pp = ref false in 
+let paramRT = ref None in
 let nb = ref 500000 in
 let to_file = ref false in
 let exo = ref Associativite in
@@ -53,7 +55,9 @@ let () = Arg.parse
  | "bn" -> BankNaive
  | "bo" -> BankOptimized
  | _ -> failwith "Erreur arg, ni a ni b"
- ), "L'exo à run : associativite (a) ou banque (b)")
+ ), "L'exo à run : associativite (a) ou banque (b)");
+ ("-repeat", Arg.Unit (fun _ -> paramRT := Some [1000;10000;100000;1000000]), "S'il faut répéter avec des val par def, ignore le nb");
+("-pp", Arg.Unit (fun _ -> pp:= true), "Pretty print pour le tp")
 ]
 (fun _ -> ())
 "Running seed"
@@ -63,11 +67,13 @@ let () = match !seed with
 | Some a -> Random.init a
 in
  let value = match !exo with
- | Associativite -> 
- 100. *. run_nb !nb |> Float.to_string
+ | Associativite -> begin
+  match !paramRT with
+  | None ->  100. *. run_nb !nb |> Float.to_string
+  | Some(a) -> List.map (fun x -> 100. *. run_nb x) a |> List.fold_left (fun acc x -> acc ^ (Float.to_string x) ^ "\n") "" end
  | BankNaive -> banking (Float.exp 1.0) 50 |> Float.to_string
  | BankOptimized -> failwith "NIY" (*banking_op (Decimal.of_string Decimal.Context. "2.718281828459") 50 |> Decimal.to_string *)
  in 
  match !to_file with
- | false -> value |> print_endline
+ | false -> (if (not !pp) then value else  "(" ^ (Int.to_string !nb) ^ ";" ^ value ^ ")" )|> print_endline
  | true -> failwith "NIY"

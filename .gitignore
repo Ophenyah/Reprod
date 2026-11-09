@@ -39,3 +39,9 @@ TP2Reprod/Reproductibilit-
 TP2Reprod/Reproductibilit-
 
 .venv
+my-venv
+.ipynb_checkpoints/
+TP3/.ipynb_checkpoints/report-checkpoint.ipynb
+TP3/.ipynb_checkpoints/Untitled-checkpoint.ipynb
+TP3/.ipynb_checkpoints/variability_factors-checkpoint.md
+TP3/Part 6/.~lock.output.csv#

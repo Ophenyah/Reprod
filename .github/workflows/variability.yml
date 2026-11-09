@@ -41,7 +41,7 @@ jobs:
       - name: Sample configurations
         working-directory: TP3/Part 5
         run: |
-          python3 sample.py ./fm/Assoc.uvl --size 20 --seed 1 
+          python3 sample.py ./fm/Assoc.uvl --size 40 --seed 1 
 
       # --- Docker images ---------------------------------------------------
       - name: Build Docker images

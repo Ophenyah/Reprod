@@ -1,41 +1,41 @@
 config_id,origin_of_config,Language,Ocaml,ENV,Typed,Distribution,Range,Iterations, result
 r01,random,Ocaml,Duneproject,on my machine,Z,Random.float,[-1e16!1e16],1000,100.000000
 r02,random,Ocaml,Duneproject,on my machine,Z,Random.float,[-1e10!1e10],1000,100.000000
-r03,random,Ocaml,Duneproject,on my machine,Float,Random.float,[-1e16!1e16],1000000,75.359200
+r03,random,Ocaml,Duneproject,on my machine,Float,Random.float,[-1e16!1e16],1000000,75.290300
 r04,random,Ocaml,Duneproject,on my machine,Z,Random.float,[-1e10!1e10],1000000,100.000000
 r05,random,Ocaml,Duneproject,Docker,Z,Random.float,[-1e16!1e16],1000000,100.000000
-r06,random,Ocaml,Duneproject,Docker,Float,Random.float,[0!1],100,80.000000
+r06,random,Ocaml,Duneproject,Docker,Float,Random.float,[0!1],100,79.000000
 r07,random,Python,,Docker,Float,random.Random,[-1e10!1e10],1000000,92.274900
-r08,random,Ocaml,Duneproject,on my machine,Float,Random.float,[0!1],1000000,82.819000
-r09,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[-1e16!1e16],1000000,75.283000
+r08,random,Ocaml,Duneproject,on my machine,Float,Random.float,[0!1],1000000,82.813900
+r09,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[-1e16!1e16],1000000,75.317500
 r10,random,Python,,Docker,Decimal,random.Random,[0!1],1000,100.000000
 r11,random,Python,,Docker,Decimal,random.Random,[-1e16!1e16],1000,100.000000
-r12,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[0!1],1000,79.700000
+r12,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[0!1],1000,82.800000
 r13,random,Ocaml,Duneproject,on my machine,Z,Random.float,[0!1],1000,100.000000
-r14,random,Ocaml,Duneproject,on my machine,Float,Random.float,[-1e16!1e16],100,78.000000
+r14,random,Ocaml,Duneproject,on my machine,Float,Random.float,[-1e16!1e16],100,75.000000
 r15,random,Ocaml,ocamlopt,on my machine,Z,Random.float,[-1e16!1e16],100,100.000000
-r16,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[0!1],1000000,82.878600
+r16,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[0!1],1000000,82.779700
 r17,random,Python,,on my machine,Float,random.Random,[-1e10!1e10],100,95.000000
-r18,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[-1e16!1e16],100,74.000000
+r18,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[-1e16!1e16],100,72.000000
 r19,random,Ocaml,Duneproject,on my machine,Z,Random.float,[-1e16!1e16],1000000,100.000000
-r20,random,Ocaml,Duneproject,Docker,Float,Random.float,[-1e16!1e16],100,68.000000
+r20,random,Ocaml,Duneproject,Docker,Float,Random.float,[-1e16!1e16],100,84.000000
 r21,random,Ocaml,ocamlopt,on my machine,Z,Random.float,[-1e16!1e16],1000000,100.000000
 r22,random,Ocaml,Duneproject,on my machine,Z,Random.float,[0!1],100,100.000000
 r23,random,Ocaml,ocamlopt,on my machine,Z,Random.float,[-1e10!1e10],1000,100.000000
-r24,random,Ocaml,Duneproject,on my machine,Float,Random.float,[-1e16!1e16],1000,77.600000
+r24,random,Ocaml,Duneproject,on my machine,Float,Random.float,[-1e16!1e16],1000,78.200000
 r25,random,Ocaml,ocamlopt,on my machine,Z,Random.float,[0!1],1000,100.000000
 r26,random,Python,,Docker,Float,random.Random,[-1e10!1e10],1000,91.700000
 r27,random,Ocaml,Duneproject,Docker,Z,Random.float,[0!1],100,100.000000
 r28,random,Ocaml,ocamlopt,on my machine,Z,Random.float,[-1e16!1e16],1000,100.000000
 r29,random,Python,,Docker,Float,random.Random,[-1e16!1e16],1000,90.300000
 r30,random,Ocaml,Duneproject,Docker,Z,Random.float,[-1e10!1e10],1000000,100.000000
-r31,random,Ocaml,Duneproject,on my machine,Float,Random.float,[-1e10!1e10],100,74.000000
+r31,random,Ocaml,Duneproject,on my machine,Float,Random.float,[-1e10!1e10],100,77.000000
 r32,random,Python,,on my machine,Float,random.Random,[-1e16!1e16],1000,90.300000
 r33,random,Python,,Docker,Float,random.Random,[-1e10!1e10],100,95.000000
-r34,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[-1e16!1e16],1000,76.200000
-r35,random,Ocaml,Duneproject,Docker,Float,Random.float,[-1e10!1e10],1000000,75.417400
+r34,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[-1e16!1e16],1000,75.300000
+r35,random,Ocaml,Duneproject,Docker,Float,Random.float,[-1e10!1e10],1000000,75.492000
 r36,random,Ocaml,Duneproject,Docker,Z,Random.float,[0!1],1000000,100.000000
-r37,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[-1e10!1e10],1000,75.100000
+r37,random,Ocaml,ocamlopt,on my machine,Float,Random.float,[-1e10!1e10],1000,76.700000
 r38,random,Python,,Docker,Decimal,random.Random,[-1e10!1e10],1000,100.000000
 r39,random,Python,,on my machine,Decimal,random.Random,[0!1],1000000,100.000000
-r40,random,Ocaml,Duneproject,on my machine,Float,Random.float,[0!1],100,85.000000
+r40,random,Ocaml,Duneproject,on my machine,Float,Random.float,[0!1],100,82.000000
